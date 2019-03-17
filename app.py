@@ -113,7 +113,7 @@ def serve_content(path: str, filename: str = None) -> Tuple[int, bytes]:
 
     file_type, file_encoding = mimetypes.guess_type(path)
 
-    if file_type == 'application/x-zip-compressed':
+    if file_type in ('application/x-zip-compressed', 'application/zip'):
         try:
             with ZipFile(path, 'r') as input_zip:
                 with input_zip.open(filename) as input_file:
