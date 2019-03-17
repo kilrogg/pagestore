@@ -82,9 +82,8 @@ def upload_to_target(upload: FileUpload, target: str) -> Tuple[int, bytes]:
     :param target: Unter welchem Namen soll die Datei später wieder gefunden werden?
     :return: Tuple aus http-Status-Code und UTF-8 Bytestring als Antwort für den Browser
     """
-    target_path = ROOT_DIR / target
-    target_path = target_path.resolve()
-    if str(ROOT_DIR.resolve()) not in str(target_path):
+    target_path = (ROOT_DIR / target).resolve()
+    if ROOT_DIR.resolve() not in target_path.parents:
         # somebody tried to escape from out root_path
         return 400, html_output("Fehler", "Ziel liegt nicht im Dokumenten-Pfad.")
 
