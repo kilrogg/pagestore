@@ -155,7 +155,7 @@ def serve_content(path: str, filename: str = None) -> Tuple[int, bytes]:
 
 @route('/upload', method='GET')
 @route('/upload/', method='GET')
-def index():
+def upload_form():
     return f"""
         <html>
         <head>
