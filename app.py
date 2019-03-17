@@ -3,6 +3,7 @@ import json
 import mimetypes
 import os
 import tarfile
+from pathlib import Path
 from typing import Tuple
 from zipfile import ZipFile
 
@@ -205,6 +206,31 @@ def do_upload():
     return message
 
 
+@route('/')
+def index():
+    content = '<ul>'
+
+    root = Path(ROOT_DIR)
+    for dir in root.glob('**/info.json'):
+        info = read_info_json(str(dir.parent))
+        target = dir.parent.relative_to(root)
+        content += f'<li><a href="/{target}/">{target}</a>'
+        for v in range(1, info['version']):
+            content += f' <a href="/{target}/v{v}/">[v{v}]</a>'
+        content += '</li>'
+
+    content += '</ul>'
+
+    return html_output('Index', f"""
+        Neue Datei hochladen: <a href="/upload/">/upload/</a>
+        </p><p>
+        <b>Aktueller Content:</b>
+        </p>
+            {content}
+        <p> 
+    """)
+
+
 @route('<path:path>')
 def static_serve(path):
     parts = path.rstrip('/').lstrip('/').split('/')
@@ -239,4 +265,4 @@ def static_serve(path):
 
 
 if __name__ == '__main__':
-    run(host='localhost', port=8080)
+    run(host='localhost', port=8080, reloader=True)
